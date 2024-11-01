@@ -48,7 +48,7 @@ router.get('/products', async (req, res) => {
     const { pg, limit, sort, filter } = req.query;
     const cartSelected=config.CART_SELECTED_ID;
     const products = await controllerProduct.get(parseInt(pg), parseInt(limit), sort, filter);
-    console.log(products);
+
     
     const data = {
         docs: products.docs,
@@ -63,7 +63,6 @@ router.get('/products', async (req, res) => {
         filter: filter,  
         cartSelected:cartSelected 
     };
-    console.log(data);
     res.status(200).render('products', {data:data});
 });
 
