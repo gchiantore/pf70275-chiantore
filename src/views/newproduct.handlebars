@@ -1,0 +1,65 @@
+<style>
+    .newproduct-container {
+        margin-top: 64px !important;
+        max-width: 360px;
+        margin: auto;
+        padding: 32px;
+        border-radius: 0.5em;
+        color: #000;
+        border: 1px solid #666;
+    }
+
+    .a2 {
+        color: #e1e1e1;
+    }
+
+    .a2:hover {
+        color: #fff;
+    }
+</style>
+ <h1>Proyecto Final Backend</h1>
+    <h6>CodeHouse / Backend 1 / Comision 70275 / Chiantore</h6>
+    <hr>
+    <h5 class="text-center">Nuevo Producto</h5>
+    <hr>
+<div class="newproduct-container">
+    <form action="/api/products" method="post">
+        <div class="input-group" style="width: 300px; margin-bottom: 32px;">
+            <span class="input-group-text" id="group2"><i class="bi bi-bookmark-star"></i></span>
+            <input type="text" name="title" class="form-control" placeholder="Titulo" required="required" autofocus="autofocus">
+        </div>
+
+        <div class="input-group" style="width: 300px; margin-bottom: 32px;">
+            <span class="input-group-text" id="group2"><i class="bi bi-bookmarks"></i></span>
+            <input type="text" name="description" class="form-control" placeholder="Descripcion" required="required">
+        </div>
+
+        <div class="input-group" style="width: 300px; margin-bottom: 32px;">
+            <span class="input-group-text" id="group2"><i class="bi bi-upc-scan"></i></span>
+            <input type="text" name="code" class="form-control" placeholder="Código" required="required">
+        </div>
+
+        <div class="input-group" style="width: 300px; margin-bottom: 32px;">
+            <span class="input-group-text" id="group2"><i class="bi bi-currency-dollar"></i></span>
+            <input type="text" name="price" class="form-control" placeholder="Precio" required="required">
+        </div>
+
+        <div class="input-group" style="width: 300px; margin-bottom: 32px;">
+            <span class="input-group-text" id="group2"><i class="bi bi-stack"></i></span>
+            <input type="text" name="stock" class="form-control" placeholder="Stock" required="required">
+        </div>
+
+        <div class="input-group" style="width: 300px; margin-bottom: 32px;">
+            <span class="input-group-text" id="group2"><i class="bi bi-card-checklist"></i></span>
+            <input type="text" name="status" class="form-control" placeholder="Status" required="required" defaultValue="true">
+        </div>
+
+        <div class="input-group" style="width: 300px; margin-bottom: 32px;">
+            <span class="input-group-text" id="group2"><i class="bi bi-tags-fill"></i></span>
+            <input type="text" name="category" class="form-control" placeholder="Categoria" required="required">
+        </div>
+
+        <button type="submit" class="btn btn-success">Cargar</button>
+        <button class="btn btn-dark" onclick="window.location.href = '/views/index'"><i class="bi bi-arrow-return-left"></i> Volver al Index</button>
+    </form>
+</div>

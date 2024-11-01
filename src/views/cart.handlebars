@@ -1,0 +1,175 @@
+<style>
+    .cart-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items:flex-start;
+        margin: 5px;
+        padding: 3px;
+    }
+    .cart-header {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items:flex-start;
+        margin: 0px;
+        padding: 2px;
+    }
+    .header-logo {
+        font-size: 64px;
+        padding: 20px;
+    }
+    .header-id {
+        padding: 20px;
+        font-size: 48px;
+    }
+    .cart-body {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items:flex-start;
+        margin: 15px;
+        padding: 15px;
+        width: 100%;
+    }
+
+    .table {
+        width: 100%;
+        berde-collapse: collapse;
+    }
+
+    .cart-footer {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items:flex-start;
+        margin: 15px;
+        padding: 15px;
+    }
+</style>
+
+<div>
+    <h1>Proyecto Final Backend </h1>
+    <h6>CodeHouse / Backend 1 / Comision 70275 / Chiantore</h6>
+    <hr>
+    <h5 class="text-center">Visualizacion de Carrito</h5>
+    <hr>
+    <div class="cart-container">
+        <div class="cart-header">
+            <div>
+                <i class="bi bi-cart-check-fill header-logo"></i>
+            </div>
+            <div>
+                <h1 class="header-id">{{data._id}}</h1>
+            </div>    
+        </div>
+        <div class="cart-body">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Title</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Quantyty</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody id="productsList">
+                    {{#each data.productos}}
+                        <tr>
+                            <td>{{this._id.title}}</td>
+                            <td>{{this._id.price}}</td>
+                            <td>{{this.quantity}}</td>
+                            <td>
+                                <button class="btn btn-danger btn-sm" onclick="deleteProduct('{{../data._id}}', '{{this._id._id}}')"><i class="bi bi-trash"></i></button>
+                            </td>
+                        </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+        <div class="cart-footer">
+            <hr>
+            <div>
+                <button class="btn btn-danger btn-sm" onclick="clearCart('{{data._id}}')"><i class="bi bi-cart-check-fill"></i> Vacias Carrito</button>
+                <button class="btn btn-dark btn-sm" onclick="window.location.href = '/views/index'"><i class="bi bi-arrow-return-left"></i> Volver al Index</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+<script>
+function clearCart(cartId) {
+
+    fetch(`/api/carts/${cartId}`, {
+        method: 'DELETE',
+    })
+    .then(response => {
+        if (response.ok) {
+            Toastify({
+                text: "Vaciando carrito ....",
+                duration: 3000,
+                close: true,
+                gravity: "top",
+                position: 'center',
+                backgroundColor: "red",
+                stopOnFocus: true,
+            }).showToast();
+            setTimeout(() => {
+                window.location.reload();
+            }, 3000);
+            
+        } else {
+            Toastify({
+                text: "Error al vaciar el carrito.",
+                duration: 3000,
+                close: true,
+                gravity: "top",
+                position: 'center',
+                backgroundColor: "red",
+                stopOnFocus: true,
+            }).showToast();
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
+
+function deleteProduct(cartId, productId) {
+    console.log(cartId, productId);
+    fetch(`/api/carts/${cartId}/products/${productId}`, {
+        method: 'DELETE',
+    })
+    .then(response => {
+        if (response.ok) {
+            Toastify({
+                text: "Eliminando el producto del carrito ....",
+                duration: 3000,
+                close: true,
+                gravity: "top",
+                position: 'center',
+                backgroundColor: "green",
+                stopOnFocus: true,
+            }).showToast();
+            setTimeout(() => {
+                window.location.reload();
+            }, 3000);
+        } else {
+            Toastify({
+                text: "Error al eliminar el producto del carrito.",
+                duration: 3000,
+                close: true,    
+                gravity: "top",                         
+                position: 'center',
+                backgroundColor: "red",
+                stopOnFocus: true,
+            }).showToast();
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
+</script>

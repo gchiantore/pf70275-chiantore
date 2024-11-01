@@ -1,0 +1,114 @@
+<style>
+    .paginate-container {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+        margin-left: 15px;
+        margin-right: 15px;
+    }
+</style>
+
+<div>
+    <h1>Proyecto Final Backend</h1>
+    <h6>CodeHouse / Backend 1 / Comision 70275 / Chiantore</h6>
+    <hr>
+    <h5 class="text-center">Lista de Productos Paginados</h5>
+    <hr>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Code</th>
+                <th scope="col">Title</th>
+                <th scope="col">Category</th>
+                <th scope="col">Price</th>
+                <th scope="col">Stock</th>
+                <th scope="col">Action</th>
+            </tr>
+        </thead>
+        <tbody id="productsList">
+            {{#each data.docs}}
+                <tr>
+                    <th scope="row">{{this._id}}</th>
+                    <td>{{this.code}}</td>
+                    <td>{{this.title}}</td>
+                    <td>{{this.category}}</td>
+                    <td>{{this.price}}</td>
+                    <td>{{this.stock}}</td>
+                    <td>
+                        {{#if (eq this.stock 0)}}
+                            <button class="btn btn-danger btn-sm"><i class="bi bi-x-circle"></i> Out of Stock</button>
+                        {{else}}
+                            <button class="btn btn-success btn-sm" onclick="addToCart('{{this._id}}', '{{../data.cartSelected}}')"><i class="bi bi-cart-check-fill"></i> Add to Cart</button>
+                        {{/if}}
+                    </td>
+                </tr>
+            {{/each}}
+        </tbody>
+    </table>
+
+    <div class="paginate-container">
+        <div class="prev-page">
+            {{#if data.hasPrevPage}}
+                <a href="/views/products?pg={{data.prevPage}}&limit={{data.limit}}&sort={{data.sort}}&filter={{data.filter}}" class="btn btn-info btn-sm"><i class="bi bi-caret-left-fill"></i> Previous Page </a>
+            {{/if}}
+        </div>
+        <div class="page-info">Page {{data.page}} of {{data.totalPages}}</div>
+        <div class="next-page">
+            {{#if data.hasNextPage}}
+                <a href="/views/products?pg={{data.nextPage}}&limit={{data.limit}}&sort={{data.sort}}&filter={{data.filter}}" class="btn btn-info btn-sm">Next Page <i class="bi bi-caret-right-fill"></i></a> 
+            {{/if}}    
+        </div>
+        <div>
+            <button class="btn btn-dark btn-sm" onclick="window.location.href = '/views/index'"><i class="bi bi-arrow-return-left"></i> Volver al Index</button>
+        </div>
+        <hr>
+    </div>
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
+<script>
+
+function addToCart(productId, cartId) {
+
+
+    fetch(`/api/carts/${cartId}/products/${productId}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ quantity: 1 }),
+    })
+    .then(response => {
+        if (response.ok) {
+            Toastify({
+                text: "Producto agregado al carrito.",
+                duration: 3000,
+                close: true, 
+                gravity: "top",
+                position: 'center',
+                backgroundColor: "green",
+                stopOnFocus: true, 
+            }).showToast();
+        } else {
+            Toastify({
+                text: "Error al agregar el producto al carrito.",
+                duration: 3000,
+                close: true,
+                gravity: "top",
+                position: 'center',
+                backgroundColor: "red",
+                stopOnFocus: true,
+            }).showToast();
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
+</script>

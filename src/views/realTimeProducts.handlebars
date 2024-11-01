@@ -1,0 +1,175 @@
+<style>
+    .paginate-container {
+        display: flex;
+        flex-direction:row;
+        justify-content:space-between;
+        align-items:flex-end
+        margin-bottom: 15px;
+        margin-left: 15px;
+        margin-right: 15px;
+    }
+</style>
+
+
+<div>
+    <h1>Proyecto Final Backend</h1>
+    <h6>CodeHouse / Backend 1 / Comision 70275 / Chiantore</h6>
+    <hr>
+    <h5 class="text-center">Lista dinamica de productos usando Socket.io </h5>
+    <hr>
+
+    <table class="table">
+        <thead>
+            <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Code</th>
+            <th scope="col">Title</th>
+            <th scope="col">Category</th>
+            <th scope="col">Price</th>
+            <th scope="col">Stock</th>
+            <th scope="col">Action</th>
+            </tr>
+        </thead>
+        <tbody id ="productsList">
+            
+        </tbody>
+    </table>
+</div>
+
+<div class="paginate-container">
+    <div class="prev-page">
+        <button class="btn btn-info btn-sm"><i class="bi bi-caret-left-fill"></i> Previous Page </button>
+    </div>
+    <div class="page-info">{{data.page}}/{{data.totalDocs}}</div>
+    <div class="next-pa">
+        <button class="btn btn-info btn-sm">Next Page <i class="bi bi-caret-right-fill"></i></button>
+    </div>
+    <hr>
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+<script>
+    const url = ""; // vacío para Localhost
+    const options = {};
+   // Conexión al SERVIDOR websockets
+    const socketClient = io();
+
+    // Se habilita un listener atento a la conexión
+    // Cuando este cliente logra conectar con el servidor, se ejecuta este callback
+    socketClient.on('connect', async () => {
+        console.log(`Conectado servidor socket.io ${url}`);
+        Toastify({
+            text: `Conectado servidor socket.io ${url}`,
+            duration: 4000,
+            close: true,
+            gravity: "top", 
+            position: "center", 
+            stopOnFocus: true, 
+            style: {
+                background: "linear-gradient(to right, #0575e6, #021b79)",
+            }
+            }).showToast();
+        socketClient.emit('new_user_data', {user: 'Cliente'});
+    });
+
+    // Suscripciones
+    socketClient.on('current_list', data => {
+        Toastify({
+            text: "Lista de Productos cargada con exito",
+            duration: 4000,
+            close: true,
+            gravity: "top", 
+            position: "center", 
+            stopOnFocus: true, 
+            style: {
+                background: "linear-gradient(to right, #56ccf2, #2f80ed)",
+            }
+            }).showToast();
+        productsList.innerHTML = '';
+        currenPage=data.page;
+        totalPage=data.totalDocs;
+        data.docs.forEach(products => {
+            let btn = '';
+            if (products.stock == 0) {
+                btn ='<button class="btn btn-danger btn-sm"><i class="bi bi-x-circle"></i> Out of Stock</button>'
+            }else{
+                btn= '<button class="btn btn-success btn-sm"><i class="bi bi-cart-check-fill"></i> Add to Cart</button>'
+            }
+            productsList.innerHTML += `
+                <tr>
+                <th scope="row">${products._id}</th>
+                <td>${products.code}</td>
+                <td>${products.title}</td>
+                <td>${products.category}</td>
+                <td>${products.price}</td>
+                <td>${products.stock}</td>
+                <td>
+                    ${btn}
+                </td>
+                </tr>
+            `;
+        });
+    });
+
+    // new_general_msg lo genera el servidor para TODOS cuando recibe de CUALQUIER
+    // cliente un nuevo mensaje
+    socketClient.on('new_product', data => {
+        console.log(data);
+        let notificationText="";
+        let notificationColor="";
+        switch (data.state) {
+            case 'created':
+                        notificationText='Se ha creado un nuevo producto'; 
+                        notificationColor="linear-gradient(to right, #00d2ff, #3a7bd5)";
+                        break;
+                        
+            case 'updated':
+                        notificationText='Se ha actualizado un producto'; 
+                        notificationColor="linear-gradient(to right, #dce35b, #45b649)";
+                        break;
+                        
+            case 'delete':
+                        notificationText='Se ha eliminado un producto'; 
+                        notificationColor="linear-gradient(to right, #ed213a, #93291e)";
+                        break; 
+            };
+
+        Toastify({
+            text: notificationText,
+            duration: 3000,
+            close: true,
+            gravity: "top", 
+            position: "center", 
+            stopOnFocus: true, 
+            style: {
+                background: notificationColor,
+            }
+            }).showToast();
+        productsList.innerHTML = '';
+        currenPage=data.page;
+        totalPage=data.totalDocs;
+        data.listProducts.docs.forEach(products => {
+            let btn = '';
+            if (products.stock == 0) {
+                btn ='<button class="btn btn-danger btn-sm"><i class="bi bi-x-circle"></i> Out of Stock</button>'
+            }else{
+                btn= '<button class="btn btn-success btn-sm"><i class="bi bi-cart-check-fill"></i> Add to Cart</button>'
+            }
+            productsList.innerHTML += `
+                <tr>
+                <th scope="row">${products.docs._id}</th>
+                <td>${products.code}</td>
+                <td>${products.title}</td>
+                <td>${products.category}</td>
+                <td>${products.price}</td>
+                <td>${products.stock}</td>
+                <td>
+                    ${btn}
+                </td>
+                </tr>
+            `;
+        });
+    });
+
+</script>

@@ -1,0 +1,53 @@
+<style>
+    .newuser-container {
+        margin-top: 64px !important;
+        max-width: 360px;
+        margin: auto;
+        padding: 32px;
+        border-radius: 0.5em;
+        color: #fff;
+        border: 1px solid #666;
+    }
+
+    .a2 {
+        color: #e1e1e1;
+    }
+
+    .a2:hover {
+        color: #fff;
+    }
+</style>
+
+ <h1>Proyecto Final Backend</h1>
+    <h6>CodeHouse / Backend 1 / Comision 70275 / Chiantore</h6>
+    <hr>
+    <h5 class="text-center">Nuevo Usuario</h5>
+    <hr>
+<div class="newuser-container">
+
+    {{!-- Ejemplo de formulario multipart para envío de archivos junto a los campos de texto --}}
+    <form action="/api/users" method="post" enctype="multipart/form-data">
+        <div class="input-group" style="width: 300px; margin-bottom: 32px;">
+            <span class="input-group-text" id="group2"><i class="bi bi-person-fill"></i></span>
+            <input type="text" name="firstName" class="form-control" placeholder="Nombre" required="required" autofocus="autofocus">
+        </div>
+
+        <div class="input-group" style="width: 300px; margin-bottom: 32px;">
+            <span class="input-group-text" id="group2"><i class="bi bi-person-fill"></i></span>
+            <input type="text" name="lastName" class="form-control" placeholder="Apellido" required="required">
+        </div>
+
+        <div class="input-group" style="width: 300px; margin-bottom: 32px;">
+            <span class="input-group-text" id="group2"><i class="bi bi-at"></i></span>
+            <input type="email" name="email" class="form-control" placeholder="email" required="required">
+        </div>
+
+        <div class="input-group" style="width: 300px; margin-bottom: 32px;">
+            <span class="input-group-text" id="group2"><i class="bi bi-person-bounding-box"></i></span>
+            <input type="file" name="thumbnail" class="form-control">
+        </div>
+            
+        <button type="submit" class="btn btn-success">Cargar</button>
+        <button class="btn btn-dark" onclick="window.location.href = '/views/index'"><i class="bi bi-arrow-return-left"></i> Volver al Index</button>
+    </form>
+</div>
