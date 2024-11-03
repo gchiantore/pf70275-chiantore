@@ -208,3 +208,26 @@ Aqui la cosa es especial porque al crear un carrito este solo debe tener el id y
 
 analicemos el get
 
+Aqui obtendremos todos los productos de un carrito dado en el req.params, en el caso del ejemplo obtendremos los productos del carrito con id 67240f30ba0a420006254d7f
+
+```
+Metodo : GET
+Direccion: localhost:8080/api/carts/67240f30ba0a420006254d7f
+```
+
+el metodo POST crea un carrito con un array de productos vacios por lo que no hace falta enviar ningun JSON 
+
+```
+Metodo : POST
+Direccion: localhost:8080/api/carts
+```
+
+El metodo PUT tiene como objetivo modificar o agregar un producto al carrito, es decir si el producto enviado en el req.params existe en el carrito incrementa en 1 la cantidad, y si no existe, agrega dicho procuto con cantidad 1, un ejemplo seria el de abajo 
+
+```
+Metodo : PUT
+Direccion: localhost:8080/api/carts/67240f30ba0a420006254d7f/products/6724e891ba0a420006254ddc
+```
+
+Por ultimo el metodo DELETE solo vacia el contenido del carrito, es decir deja vacio el aaray de productos. 
+
