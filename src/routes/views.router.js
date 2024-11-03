@@ -20,13 +20,19 @@ router.get('/index', (req, res) => {
 });
 
 router.get ('/newuser', (req, res) => {
-    const data = {};
+    const idCart=config.CART_SELECTED_ID 
+    const data = {
+        cart:idCart
+    };
 
     res.status (200).render ('newuser', data);
 });
 
 router.get ('/newproduct', (req, res) => {
-    const data = {};
+    const idCart=config.CART_SELECTED_ID 
+    const data = {
+        cart:idCart
+    };
 
     res.status (200).render ('newproduct', data);
 });
@@ -39,7 +45,12 @@ router.get ('/cart/:cid', async(req, res) => {
 })
 
 router.get ('/setcart', async(req, res) => {
-    const data=await controllerCart.getAll();
+    const idCart=config.CART_SELECTED_ID 
+    const cartData=await controllerCart.getAll();
+    const data = {
+        cart:idCart,
+        data:cartData
+    }
     res.status (200).render ('setcart', {data:data});
 
 })
@@ -68,7 +79,11 @@ router.get('/products', async (req, res) => {
 
 
 router.get('/realtimeproducts', async (req, res) => {
-    res.status(200).render('realTimeProducts');
+    const idCart=config.CART_SELECTED_ID 
+    const data = {
+        cart:idCart
+    }
+    res.status(200).render('realTimeProducts',data);
 });
 
 
